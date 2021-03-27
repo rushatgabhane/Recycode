@@ -13,9 +13,7 @@ app.listen(port, () => {
   console.log(`Example app listening at http://localhost:${port}`)
 })
 
-app.post("/company/signup",companyController.signup)
-
-app.post("/company/login",companyController.login)
+app.use('/company', require('./routes/api/company'))
 
 /*
 // todo: retrieve information from database before compressing into QR code
@@ -37,6 +35,13 @@ app.use((error, req, res, next) => {
     });
 });
 
+// @route  GET invalid routes
+// @desc   Display page not found message
+// @access Public
+app.get('*', (req, res) => {
+	res.status(404).send('404');
+});
+
 mongoose.connect(
     "mongodb+srv://admin:tY64btMwd6@QK8@@cluster0.b51ev.mongodb.net/myFirstDatabase?retryWrites=true&w=majority",
     // avoid some deprecation warnings
@@ -47,5 +52,5 @@ mongoose.connect(
         useFindAndModify: false,
       }
 ).catch((err)=>{
-    console.log(err)
+    console.error(err)
 })
