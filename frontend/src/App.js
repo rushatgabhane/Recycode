@@ -1,8 +1,8 @@
-import ProductGeneration from './pages/ProductgenerationPage/productGeneration'
-
+import React from "react"
+import RoutingTable from "./RoutingTable"
 function App() {
   return (
-   <ProductGeneration/>
+    <RoutingTable />
   );
 }
 
