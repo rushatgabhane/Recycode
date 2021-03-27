@@ -8,7 +8,7 @@ const config = require('config')
 app.use(cors())
 app.use(express.json())
 
-app.use('/company', require('./routes/api/company'))
+app.use('/api/company', require('./routes/api/company'))
 
 /*
 // todo: retrieve information from database before compressing into QR code

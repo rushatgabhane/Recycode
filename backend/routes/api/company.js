@@ -4,12 +4,14 @@ const ServerError = require("../../ServerError")
 const jwt = require("jsonwebtoken")
 const express = require('express')
 const router = express.Router()
+const config = require('config')
 
 // @route POST api/company/signup
 // @desc sign up 
 // @access public
-router.post('/signup', async (req, res, next) => {
+router.post('/signup', async (req, res) => {
     const {name,email,password} = req.body;
+    console.log(email)
     let hashedPassword; // 12 is the strength of the hash
     try {
         let company = await Company.findOne({email})
@@ -31,8 +33,8 @@ router.post('/signup', async (req, res, next) => {
         
         // return jsonwebtoken
         const payload = {
-            user: {
-                id: user.id
+            newCompany: {
+                id: newCompany.id
             }
         }
         jwt.sign(payload, config.get('jwtSecret'), {expiresIn: 360000}, (err, token) => {
@@ -40,6 +42,7 @@ router.post('/signup', async (req, res, next) => {
             res.json({token})
         })
     }  catch (err) {
+        console.error(err.message)
         return res.status(500).json({errors: [{msg: 'Server error'}]})
     }
 })
@@ -47,26 +50,26 @@ router.post('/signup', async (req, res, next) => {
 // @route POST api/company/login
 // @desc login 
 // @access public
-router.post('/login', async (req, res, next) => {
-    const {name,password} = req.body
+router.post('/login', async (req, res) => {
+    const {email,password} = req.body
     try {
-        const existingCompany= await Company.findOne({name})
+        let existingCompany= await Company.findOne({email})
         if(!existingCompany){
             return res.status(400).json({
                 errors: [{msg: 'Invalid Credentials'}]
             })
-        } else{
-            let isValidPassword = await bcrypt.compare(password, existingCompany.password)
-            if(!isValidPassword){
-                return res.status(400).json({
-                    errors: [{msg: 'Invalid Credentials'}]
-                })
-            }
+        } 
+        let isValidPassword = await bcrypt.compare(password, existingCompany.password)
+        if(!isValidPassword){
+            return res.status(400).json({
+                errors: [{msg: 'Invalid Credentials'}]
+            })
         }
+    
         // return jsonwebtoken
         const payload = {
-            user: {
-                id: user.id
+            existingCompany: {
+                id: existingCompany.id
             }
         }
         jwt.sign(payload, config.get('jwtSecret'), {expiresIn: 360000}, (err, token) => {
@@ -74,6 +77,7 @@ router.post('/login', async (req, res, next) => {
             res.json({token})
         })
     } catch (err) {
+        console.error(err.msg)
         return res.status(500).json({errors: [{msg: 'Server error'}]})
     }
 })
