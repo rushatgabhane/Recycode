@@ -3,7 +3,6 @@ const app = express()
 const cors = require("cors")
 const QRCode = require("qrcode")
 const mongoose = require('mongoose')
-const companyController = require("./controllers/company-controller")
 const config = require('config')
 
 app.use(cors())
