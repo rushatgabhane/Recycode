@@ -9,7 +9,7 @@ app.use(cors())
 app.use(express.json())
 
 app.use('/api/company', require('./routes/api/company'))
-
+app.use('/api/dashboard', require('./routes/api/dashboard'))
 /*
 // todo: retrieve information from database before compressing into QR code
 app.get('/qrcode', (req, res) => {
