@@ -8,10 +8,9 @@ const router = express.Router()
 // @route POST api/company/signup
 // @desc sign up 
 // @access public
-router.post('/signup', async (req, res) => {
+router.post('/signup', async (req, res, next) => {
     const {name,email,password} = req.body;
     let hashedPassword; // 12 is the strength of the hash
-
     try {
         let company = await Company.findOne({email})
         if(company) {
@@ -19,57 +18,64 @@ router.post('/signup', async (req, res) => {
                 errors: [{msg: 'Email is already registered. Please login.'}]
             })
         }
-    } catch (err) {
-        console.error(err.message)
-        res.status(500).json({errors: [{msg: 'Server error'}]})
-    }
 
-    try {
         hashedPassword = await bcrypt.hash(password, 12);
-    } catch (err) {
-        return next(new ServerError("Error hashing password"))
-    }
-    const newCompany = new Company({
-        name,
-        email,
-        password:hashedPassword,
-        qrCodesScanned: 0,
-        usersRecycled: 0
-    })
-
-    try{
+        const newCompany = new Company({
+            name,
+            email,
+            password:hashedPassword,
+            qrCodesScanned: 0,
+            usersRecycled: 0
+        })
         await newCompany.save();
-    } catch(err){
-        return next(new ServerError("Error saving data"))
+        
+        // return jsonwebtoken
+        const payload = {
+            user: {
+                id: user.id
+            }
+        }
+        jwt.sign(payload, config.get('jwtSecret'), {expiresIn: 360000}, (err, token) => {
+            if(err) throw err
+            res.json({token})
+        })
+    }  catch (err) {
+        return res.status(500).json({errors: [{msg: 'Server error'}]})
     }
-    res.status(201).json({signedIn:true});
 })
 
 // @route POST api/company/login
 // @desc login 
 // @access public
-router.post('/login', async (req, res) => {
+router.post('/login', async (req, res, next) => {
     const {name,password} = req.body
-    let existingCompany
-    let isValidPassword
-    let validCredentials = true
-
-    try{
-        existingCompany= await Company.findOne({name})
-    } catch(err){
-        return next(new ServerError(err.msg))
-    }
-    if(!existingCompany){
-        console.log("no company")
-        validCredentials = false;
-    } else{
-        isValidPassword = await bcrypt.compare(password,existingCompany.password)
-        if(!isValidPassword){
-            console.log("invalid password")
-            validCredentials = false
+    try {
+        const existingCompany= await Company.findOne({name})
+        if(!existingCompany){
+            return res.status(400).json({
+                errors: [{msg: 'Invalid Credentials'}]
+            })
+        } else{
+            let isValidPassword = await bcrypt.compare(password, existingCompany.password)
+            if(!isValidPassword){
+                return res.status(400).json({
+                    errors: [{msg: 'Invalid Credentials'}]
+                })
+            }
         }
+        // return jsonwebtoken
+        const payload = {
+            user: {
+                id: user.id
+            }
+        }
+        jwt.sign(payload, config.get('jwtSecret'), {expiresIn: 360000}, (err, token) => {
+            if(err) throw err
+            res.json({token})
+        })
+    } catch (err) {
+        return res.status(500).json({errors: [{msg: 'Server error'}]})
     }
-    res.json({validCredentials})
 })
 
 module.exports = router
