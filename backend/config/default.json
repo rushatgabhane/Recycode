@@ -1,0 +1,5 @@
+{
+    "mongoURL": "mongodb+srv://admin:tY64btMwd6@QK8@@cluster0.b51ev.mongodb.net/myFirstDatabase?retryWrites=true&w=majority",
+    "port": 5000,
+    "jwtSecret": "secret key not to be made public, but im keeping this public for now."
+}

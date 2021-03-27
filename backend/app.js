@@ -4,14 +4,10 @@ const cors = require("cors")
 const QRCode = require("qrcode")
 const mongoose = require('mongoose')
 const companyController = require("./controllers/company-controller")
-const port = 5000
+const config = require('config')
 
 app.use(cors())
 app.use(express.json())
-
-app.listen(port, () => {
-  console.log(`Example app listening at http://localhost:${port}`)
-})
 
 app.use('/company', require('./routes/api/company'))
 
@@ -43,7 +39,7 @@ app.get('*', (req, res) => {
 });
 
 mongoose.connect(
-    "mongodb+srv://admin:tY64btMwd6@QK8@@cluster0.b51ev.mongodb.net/myFirstDatabase?retryWrites=true&w=majority",
+    config.get('mongoURL'),
     // avoid some deprecation warnings
     {
         useNewUrlParser: true,
@@ -53,4 +49,8 @@ mongoose.connect(
       }
 ).catch((err)=>{
     console.error(err)
+})
+
+app.listen(config.get('port'), () => {
+  console.log(`Example app listening at http://localhost:${config.get('port')}`)
 })
