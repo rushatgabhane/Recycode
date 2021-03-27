@@ -4,12 +4,22 @@ const jwt = require("jsonwebtoken")
 const express = require('express')
 const router = express.Router()
 const config = require('config')
+const { check, validationResult } = require('express-validator')
 
 // @route POST api/company/signup
 // @desc sign up 
 // @access public
+<<<<<<< HEAD
 router.post('/signup', async (req, res) => {
     const { name, email, password } = req.body;
+=======
+router.post('/signup', [
+    check('email', 'Please include a valid email').isEmail().escape().trim(),
+    check('password', 'Please enter a password with 8 or more characters').isLength({min:8, max:32}).escape().trim(),
+    check('name').escape()
+], async (req, res) => {
+    const {name,email,password} = req.body;
+>>>>>>> 57414b176637ec82d382954c525aaa77e398030c
     let hashedPassword; // 12 is the strength of the hash
     try {
         let company = await Company.findOne({ email })
@@ -48,7 +58,10 @@ router.post('/signup', async (req, res) => {
 // @route POST api/company/login
 // @desc login 
 // @access public
-router.post('/login', async (req, res) => {
+router.post('/login', [
+    check('email', 'Please include a valid email').isEmail().escape().trim(),
+    check('password', 'Please enter a password with 8 or more characters').isLength({ min: 8, max: 32 }).escape().trim()
+], async (req, res) => {
     const { email, password } = req.body
     try {
         let existingCompany = await Company.findOne({ email })
