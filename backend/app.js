@@ -3,19 +3,12 @@ const app = express()
 const cors = require("cors")
 const QRCode = require("qrcode")
 const mongoose = require('mongoose')
-const companyController = require("./controllers/company-controller")
-const port = 5000
+const config = require('config')
 
 app.use(cors())
 app.use(express.json())
 
-app.listen(port, () => {
-  console.log(`Example app listening at http://localhost:${port}`)
-})
-
-app.post("/company/signup",companyController.signup)
-
-app.post("/company/login",companyController.login)
+app.use('/company', require('./routes/api/company'))
 
 /*
 // todo: retrieve information from database before compressing into QR code
@@ -37,8 +30,15 @@ app.use((error, req, res, next) => {
     });
 });
 
+// @route  GET invalid routes
+// @desc   Display page not found message
+// @access Public
+app.get('*', (req, res) => {
+	res.status(404).send('404');
+});
+
 mongoose.connect(
-    "mongodb+srv://admin:tY64btMwd6@QK8@@cluster0.b51ev.mongodb.net/myFirstDatabase?retryWrites=true&w=majority",
+    config.get('mongoURL'),
     // avoid some deprecation warnings
     {
         useNewUrlParser: true,
@@ -47,5 +47,9 @@ mongoose.connect(
         useFindAndModify: false,
       }
 ).catch((err)=>{
-    console.log(err)
+    console.error(err)
+})
+
+app.listen(config.get('port'), () => {
+  console.log(`Example app listening at http://localhost:${config.get('port')}`)
 })
