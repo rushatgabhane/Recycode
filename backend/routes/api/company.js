@@ -9,7 +9,7 @@ const config = require('config')
 // @desc sign up 
 // @access public
 router.post('/signup', async (req, res) => {
-    const {name,email,password} = req.body;
+    const { name, email, password } = req.body;
     let hashedPassword; // 12 is the strength of the hash
     try {
         let company = await Company.findOne({ email })
@@ -39,9 +39,9 @@ router.post('/signup', async (req, res) => {
             if (err) throw err
             res.json({ token })
         })
-    }  catch (err) {
+    } catch (err) {
         console.error(err.message)
-        return res.status(500).json({errors: [{msg: 'Server error'}]})
+        return res.status(500).json({ errors: [{ msg: 'Server error' }] })
     }
 })
 
@@ -49,21 +49,21 @@ router.post('/signup', async (req, res) => {
 // @desc login 
 // @access public
 router.post('/login', async (req, res) => {
-    const {email,password} = req.body
+    const { email, password } = req.body
     try {
-        let existingCompany= await Company.findOne({email})
-        if(!existingCompany){
+        let existingCompany = await Company.findOne({ email })
+        if (!existingCompany) {
             return res.status(400).json({
                 errors: [{ msg: 'Invalid Credentials' }]
             })
-        } 
+        }
         let isValidPassword = await bcrypt.compare(password, existingCompany.password)
-        if(!isValidPassword){
+        if (!isValidPassword) {
             return res.status(400).json({
-                errors: [{msg: 'Invalid Credentials'}]
+                errors: [{ msg: 'Invalid Credentials' }]
             })
         }
-    
+
         // return jsonwebtoken
         const payload = {
             existingCompany: {
@@ -76,7 +76,7 @@ router.post('/login', async (req, res) => {
         })
     } catch (err) {
         console.error(err.msg)
-        return res.status(500).json({errors: [{msg: 'Server error'}]})
+        return res.status(500).json({ errors: [{ msg: 'Server error' }] })
     }
 })
 
