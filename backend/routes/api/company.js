@@ -10,8 +10,20 @@ const router = express.Router()
 // @access public
 router.post('/signup', async (req, res) => {
     const {name,email,password} = req.body;
-    let hashedPassword;
-    // 12 is the strength of the hash
+    let hashedPassword; // 12 is the strength of the hash
+
+    try {
+        let company = await Company.findOne({email})
+        if(company) {
+            return res.status(400).json({
+                errors: [{msg: 'Email is already registered. Please login.'}]
+            })
+        }
+    } catch (err) {
+        console.error(err.message)
+        res.status(500).json({errors: [{msg: 'Server error'}]})
+    }
+
     try {
         hashedPassword = await bcrypt.hash(password, 12);
     } catch (err) {
