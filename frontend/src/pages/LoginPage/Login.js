@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import Pic from './pic.svg'
 
 export default function Login() {
 
@@ -26,33 +27,29 @@ export default function Login() {
     }
 
     return (
-        <form onSubmit={e => { handleSubmit(e) }} class="flex justify-center h-screen items-center">
-            <div class='flex max-w-sm w-full h-64 justify-center bg-white shadow-md rounded-lg overflow-hidden mx-auto flex flex-col p-5'>
-                <br />
-                < div class="relative h-10 input-component mb-5 w-full">
+        <div className="flex flex-col lg:flex-row justify-center h-screen items-center mx-6">
+            <img className="w-4/5 sm:w-2/5 my-10" src={Pic} alt="iiest"></img>
+        <form onSubmit={e => { handleSubmit(e) }} class="flex flex-col sm:w-2/5 w-full justify-center items-center lg:mx-6">
                     <input
+                        className="relative h-10 input-component mb-5 w-full bg-gray-100 pl-2 focus:outline-none focus:ring focus:border-blue-300 rounded-xl"
                         name='name'
                         placeholder="Company Name"
                         value={name}
                         type='text'
                         onChange={e => setName(e.target.value)}
                     />
-                    <br />
-                </div>
-                < div class="relative h-10 input-component mb-5 w-full">
                     <input
+                        className="relative h-10 input-component mb-5 w-full bg-gray-100 pl-2 focus:outline-none focus:ring focus:border-blue-300 rounded-xl"
                         name='password'
                         placeholder="Password"
                         value={password}
                         type='text'
                         onChange={e => setPassword(e.target.value)}
                     />
-                    <br />
-                </ div>
-                <button class="md:w-auto bg-green-600 hover:bg-green-700 text-white font-bold py-2 px-6 rounded-lg">
+                <button className="bg-green-600 hover:bg-green-700 text-white font-bold h-10 w-36 sm:w-full rounded-xl my-4 shadow-lg sm:my-2 ">
                     Submit
                 </button>
-            </div>
         </form >
+        </div>
     )
 }
