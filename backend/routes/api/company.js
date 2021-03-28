@@ -105,7 +105,6 @@ router.post('/login', [
 // @access private
 router.get('/', auth, async (req, res) => {
     try {
-        console.log(req.user);
         const company = await Company.findById(req.user.id).select('-password') // select everything but the password
         return res.json({company})
     } catch (err) {
