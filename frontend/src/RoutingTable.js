@@ -15,8 +15,7 @@ const RoutingTable = () => {
                 <Route exact path="/product/:id" component={ProductPage} />
                 <Route exact path="/login" component={Login} />
                 <Route exact path="/signup" component={SignUp} />
-                <Route exact path="/dashboard" component={Dashboard} />
-                <Route exact path="/productgeneration" component={ProductGeneration} />
+                <Route exact path="/dashboard" component={ProductGeneration} />
             </Switch>
         </Router >
     )
