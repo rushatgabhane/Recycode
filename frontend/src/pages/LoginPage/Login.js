@@ -1,23 +1,31 @@
 import React, { useState } from "react";
+import { useHistory } from "react-router-dom"
 
 export default function Login() {
 
-    const [name, setName] = useState("");
+    const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
+    const history = useHistory();
 
     const handleSubmit = (e) => {
         e.preventDefault();
         const requestOptions = {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ name, password })
+            body: JSON.stringify({ email, password })
         };
 
-        fetch('http://localhost:5000/company/login', requestOptions)
+        fetch('http://localhost:5000/api/company/login', requestOptions)
             .then(response => response.json())
             .then(data => {
                 if (data.errors) {
                     alert(data.errors[0].msg)
+                }
+                else {
+                    // goes to dashboard after logging in
+                    history.push({
+                        pathname: `/dashboard`,
+                    });
                 }
             })
             .catch((err) => {
@@ -32,10 +40,10 @@ export default function Login() {
                 < div class="relative h-10 input-component mb-5 w-full">
                     <input
                         name='name'
-                        placeholder="Company Name"
-                        value={name}
+                        placeholder="Company Email"
+                        value={email}
                         type='text'
-                        onChange={e => setName(e.target.value)}
+                        onChange={e => setEmail(e.target.value)}
                     />
                     <br />
                 </div>
