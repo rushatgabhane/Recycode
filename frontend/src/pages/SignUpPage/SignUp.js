@@ -70,16 +70,8 @@ export default function SignUp() {
                         type='text'
                         onChange={e => setPassword(e.target.value)}
                     />
-<<<<<<< HEAD
                 <button className="bg-green-600 hover:bg-green-700 text-white font-bold h-10 w-36 sm:w-full rounded-xl my-4 shadow-lg sm:my-2 ">
                     SignUp
-||||||| 795d90c
-                <button className="bg-green-600 hover:bg-green-700 text-white font-bold h-10 w-36 sm:w-full rounded-xl my-4 shadow-lg sm:my-2 ">
-                    Submit
-=======
-                    <button className="bg-green-600 hover:bg-green-700 text-white font-bold h-10 w-36 sm:w-full rounded-xl my-4 shadow-lg sm:my-2 ">
-                        Submit
->>>>>>> cbbc2d6053b9c99abd37b64c6c2c876f7b580b76
                 </button>
                 </form >
             </div>

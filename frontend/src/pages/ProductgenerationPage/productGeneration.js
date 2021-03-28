@@ -4,7 +4,7 @@ const ProductGeneration = () => {
     const [values, setValue] = useState({
         product_type: "type1"
     })
-    const [qr,Setqr]=('')
+    const [qr,Setqr]=useState('1')
     const {product_type } = values;
     const handelChange = field => e => {
         setValue({ ...values, [field]: e.target.value })
@@ -15,18 +15,19 @@ const ProductGeneration = () => {
         const requestOptions = {
             method: 'POST',
             headers: { 'Content-Type': 'application/json'},
-            body: JSON.stringify({product_type})
+            body: JSON.stringify({productId:product_type})
         };
-
+        Setqr(product_type);
         //TODO: Set our Backend End Point
-        fetch('http://localhost:5000/api/qrcode', requestOptions)
-            .then(response => response.json())
-            .then(data => {
-                Setqr(data.url)
-            })
-            .catch((err) => {
-               console.log(err);
-            })
+        // fetch('http://localhost:5000/api/qrcode', requestOptions)
+        //     .then(response => response.json())
+        //     .then(data => {
+        //         console.log(data);
+        //         Setqr(data.url)
+        //     })
+        //     .catch((err) => {
+        //        console.log(err);
+        //     })
     }
 
     const checkValidity=()=>{
@@ -64,10 +65,7 @@ const ProductGeneration = () => {
             </div>
         </form>
 
-        {
-           /*To generate Qr code*/
-        }
-
+        <img className=" ml-5 md:ml-16 lg:ml-20" src={"https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=http://localhost:3000/"+qr}></img>
 
         </div>
     );
