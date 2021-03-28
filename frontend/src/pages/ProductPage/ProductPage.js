@@ -1,13 +1,14 @@
 import React from "react";
 import { ReactComponent as Bottles } from "../../Bottles.svg";
-import {Details} from '../../shared/detail'
+import Maps from "../Maps/Maps"
+import { Details } from '../../shared/detail'
 
 const ProductPage = (props) => {
-  let data_id=props.match.params.id;
-  if(Details.length<props.match.params.id){
-    data_id=Details.length;
+  let data_id = props.match.params.id;
+  if (Details.length < props.match.params.id) {
+    data_id = Details.length;
   }
-  const Data=Details[data_id-1];
+  const Data = Details[data_id - 1];
   // const items=Data.items;
 
   return (
@@ -40,11 +41,12 @@ const ProductPage = (props) => {
           How to recycle
         </h3>
         <p className="font-serif text-lg">
-         {Data.recycle_processes}
+          {Data.recycle_processes}
         </p>
         <h3 className="font-sans text-xl uppercase font-bold tracking-wide mt-5 mb-2">
           Find a recycling center
         </h3>
+        <Maps />
       </section>
     </main>
   );
