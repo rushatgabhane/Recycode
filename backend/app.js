@@ -8,20 +8,12 @@ const connectDB = require('./config/db')()
 app.use(cors())
 app.use(express.json())
 
+// define routes
 app.use('/api/company', require('./routes/api/company'))
 app.use('/api/dashboard', require('./routes/api/dashboard'))
 app.use('/api/facility', require('./routes/api/facility'))
 app.use('/api/product', require('./routes/api/product'))
-/*
-// todo: retrieve information from database before compressing into QR code
-app.get('/qrcode', (req, res) => {
-    var qrCode;
-    QRCode.toDataURL("www.google.com",function(err,url){
-        res.send({url})
-    })
-  //todo: error handling
-})
-*/
+app.use('/api/qrcode', require('./routes/api/qrcode'))
 
 app.use((error, req, res, next) => {
 
@@ -40,5 +32,5 @@ app.get('*', (req, res) => {
 });
 
 app.listen(config.get('port'), () => {
-  console.log(`Example app listening at http://localhost:${config.get('port')}`)
+  console.log(`Server started at http://localhost:${config.get('port')}`)
 })

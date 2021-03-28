@@ -5,18 +5,26 @@ const express = require('express')
 const router = express.Router()
 const config = require('config')
 const { check, validationResult } = require('express-validator')
-
+const auth = require('../../middleware/auth')
 // @route POST api/company/signup
 // @desc sign up 
 // @access public
 router.post('/signup', [
     check('email', 'Please include a valid email').isEmail().escape().trim(),
     check('password', 'Please enter a password with 8 or more characters').isLength({ min: 8, max: 32 }).escape().trim(),
-    check('name').escape()
+    check('name', 'Company name is required').escape().trim().not().isEmpty()
 ], async (req, res) => {
+    const errors = validationResult(req)
+    if(!errors.isEmpty()){
+        return res.status(400).json({errors: errors.array()})
+    }
     const { name, email, password } = req.body;
     let hashedPassword; // 12 is the strength of the hash
     try {
+        const errors = validationResult(req)
+        if(!errors.isEmpty()){
+            return res.status(400).json({errors: errors.array()})
+        }
         let company = await Company.findOne({ email })
         if (company) {
             return res.status(400).json({
@@ -36,7 +44,7 @@ router.post('/signup', [
 
         // return jsonwebtoken
         const payload = {
-            newCompany: {
+            user: {
                 id: newCompany.id
             }
         }
@@ -55,26 +63,30 @@ router.post('/signup', [
 // @access public
 router.post('/login', [
     check('email', 'Please include a valid email').isEmail().escape().trim(),
-    check('password', 'Please enter a password with 8 or more characters').isLength({ min: 8, max: 32 }).escape().trim()
+    check('password', 'Password is required').escape().trim().not().isEmpty()
 ], async (req, res) => {
+    const errors = validationResult(req)
+    if(!errors.isEmpty()){
+        return res.status(400).json({errors: errors.array()})
+    }
     const { email, password } = req.body
     try {
         let existingCompany = await Company.findOne({ email })
         if (!existingCompany) {
             return res.status(400).json({
-                errors: [{ msg: 'Invalid email' }]
+                errors: [{ msg: 'Invalid credentials' }]
             })
         }
         let isValidPassword = await bcrypt.compare(password, existingCompany.password)
         if (!isValidPassword) {
             return res.status(400).json({
-                errors: [{ msg: 'Invalid password' }]
+                errors: [{ msg: 'Invalid credentials' }]
             })
         }
 
         // return jsonwebtoken
         const payload = {
-            existingCompany: {
+            user: {
                 id: existingCompany.id
             }
         }
@@ -84,6 +96,19 @@ router.post('/login', [
         })
     } catch (err) {
         console.error(err.msg)
+        return res.status(500).json({ errors: [{ msg: 'Server error' }] })
+    }
+})
+
+// @route GET api/company
+// @desc get company details
+// @access private
+router.get('/', auth, async (req, res) => {
+    try {
+        const company = await Company.findById(req.user.id).select('-password') // select everything but the password
+        return res.json({company})
+    } catch (err) {
+        console.error(err.message)
         return res.status(500).json({ errors: [{ msg: 'Server error' }] })
     }
 })
