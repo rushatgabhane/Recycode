@@ -7,10 +7,6 @@ const mapStyles = {
     height: '100%'
 };
 
-const facilities = [{ position: { lat: 56.33891, lng: -2.74184416996333 }, name: "test", description: "test", category: "Plastic" },
-{ position: { lat: 56.32791, lng: -2.74154416993 }, name: "test1", description: "test1", category: "Plastic" },
-{ position: { lat: 56.34791, lng: -2.74354416993 }, name: "test2", description: "test2", category: "Plastic" }]
-
 export function Maps(props) {
     const [currentPos, setPos] = useState()
     const [hasLoaded, setLoaded] = useState(false)
