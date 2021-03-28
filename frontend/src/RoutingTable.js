@@ -12,7 +12,7 @@ const RoutingTable = () => {
         <Router >
             <Switch>
                 <Route exact path="/" component={Home} />
-                <Route exact path="/plastic/hdpe" component={ProductPage} />
+                <Route exact path="/product/:id" component={ProductPage} />
                 <Route exact path="/login" component={Login} />
                 <Route exact path="/signup" component={SignUp} />
                 <Route exact path="/dashboard" component={Dashboard} />
