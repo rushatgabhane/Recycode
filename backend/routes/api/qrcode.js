@@ -7,9 +7,9 @@ const { check, validationResult } = require('express-validator')
 // @route POST api/qrcode
 // @desc returns url to set for the qrcode.
 // @access private
-router.post('/', [auth, [
+router.post('/', [
 	check('productId', 'Please include a valid product Id').escape().trim().not().isEmpty()
-]], async (req, res) => {
+], async (req, res) => {
 	try {
 		const errors = validationResult(req)
 		if(!errors.isEmpty()){
