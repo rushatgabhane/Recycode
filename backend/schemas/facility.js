@@ -3,9 +3,10 @@
 const mongoose = require("mongoose")
 
 const facilitySchema = new mongoose.Schema({
-    coordinates: {type:String},
-    productType: {type:String},
-    instructions: {type:String},
+    coordinates: String,
+    category: String,
+    description: String,
+    instructions: String
 })
 
-module.exports = mongoose.model("Region",regionSchema)
+module.exports = mongoose.model("Facility", facilitySchema)

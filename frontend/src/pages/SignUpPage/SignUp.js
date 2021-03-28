@@ -1,10 +1,12 @@
 import React, { useState } from "react";
+import { useHistory } from "react-router-dom"
 
-export default function SignIn() {
+export default function SignUp() {
 
     const [name, setName] = useState("");
     const [password, setPassword] = useState("");
     const [email, setEmail] = useState("");
+    const history = useHistory();
 
     const handleSubmit = (e) => {
         e.preventDefault();
@@ -14,11 +16,17 @@ export default function SignIn() {
             body: JSON.stringify({ name, email, password })
         };
 
-        fetch('http://localhost:5000/company/signin', requestOptions)
+        fetch('http://localhost:5000/api/company/signup', requestOptions)
             .then(response => response.json())
             .then(data => {
                 if (data.errors) {
                     alert(data.errors[0].msg)
+                }
+                else {
+                    // goes to dashboard after sign in
+                    history.push({
+                        pathname: `/dashboard`,
+                    });
                 }
             })
             .catch((err) => {
@@ -42,7 +50,7 @@ export default function SignIn() {
                 </div>
                 < div class="relative h-10 input-component mb-5 w-full">
                     <input
-                        name='name'
+                        name='email'
                         placeholder="Company Email Address"
                         value={email}
                         type='text'
