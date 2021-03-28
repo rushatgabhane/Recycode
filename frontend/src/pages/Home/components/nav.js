@@ -1,10 +1,12 @@
 import {Link} from 'react-router-dom'
+import Logo from './logo.png'
+
 const Nav=()=>{
     return (
         <div className="sticky top-0 z-50 bg-white">
     <nav className="flex h-20  items-center">
-        <div className="ml-6">
-            <img src={'./'} alt="logo"/>
+        <div className="ml-8">
+            <img src={Logo} alt="logo" className="h-12"/>
         </div>
         <div>
             <ul className="flex">
