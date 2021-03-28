@@ -14,12 +14,12 @@ const ProductGeneration = () => {
         console.log(values);
         const requestOptions = {
             method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
+            headers: { 'Content-Type': 'application/json'},
             body: JSON.stringify({product_type})
         };
 
         //TODO: Set our Backend End Point
-        fetch('http://localhost:5000/', requestOptions)
+        fetch('http://localhost:5000/api/qrcode', requestOptions)
             .then(response => response.json())
             .then(data => {
                 Setqr(data.url)
