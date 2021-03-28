@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import config from "../../config/map-key.json"
+import facilities from "../../config/facilities"
 import { Map, GoogleApiWrapper, Marker, InfoWindow } from 'google-maps-react';
 
 const mapStyles = {

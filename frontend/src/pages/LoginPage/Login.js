@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import Pic from './pic.svg'
-import Maps from "../Maps/Maps2"
 
 import { useHistory } from "react-router-dom"
 
